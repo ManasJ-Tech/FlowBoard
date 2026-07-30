@@ -61,18 +61,8 @@ function EditProjectDialog({ project, onUpdated }) {
     >
 
 
-      <DialogTrigger
-        className="
-        rounded-lg
-        bg-blue-600
-        px-5
-        py-2
-        text-white
-        hover:bg-blue-700
-        transition
-        "
-      >
-        Edit Project
+      <DialogTrigger asChild>
+        <Button variant="default" size="sm">Edit</Button>
       </DialogTrigger>
 
 

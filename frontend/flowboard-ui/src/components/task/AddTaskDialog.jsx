@@ -26,6 +26,7 @@ function AddTaskDialog({ projectId, onCreated }) {
     const [description, setDescription] = useState("");
 
     const [assignedUserId, setAssignedUserId] = useState("");
+    const [dueDate, setDueDate] = useState("");
 
     const [users, setUsers] = useState([]);
 
@@ -80,6 +81,8 @@ function AddTaskDialog({ projectId, onCreated }) {
                     assignedUserId
                     ? Number(assignedUserId)
                     : null
+                    ,
+                    dueDate: dueDate || null
 
             });
 
@@ -90,6 +93,7 @@ function AddTaskDialog({ projectId, onCreated }) {
             setDescription("");
 
             setAssignedUserId("");
+            setDueDate("");
 
             setOpen(false);
 
@@ -108,8 +112,6 @@ function AddTaskDialog({ projectId, onCreated }) {
 
 
 
-
-
     return (
 
         <Dialog
@@ -120,23 +122,7 @@ function AddTaskDialog({ projectId, onCreated }) {
 
 
             <DialogTrigger asChild>
-
-                <button
-                    className="
-                    bg-blue-600
-                    text-white
-                    px-4
-                    py-2
-                    rounded-lg
-                    hover:bg-blue-700
-                    "
-                >
-
-                    Add Task
-
-                </button>
-
-
+                <Button variant="default" size="sm">Add Task</Button>
             </DialogTrigger>
 
 
@@ -311,25 +297,17 @@ function AddTaskDialog({ projectId, onCreated }) {
 
 
 
-                    <button
+                    <div className="space-y-2">
+                        <Label className="text-muted-custom">Due Date</Label>
+                        <Input
+                            type="date"
+                            value={dueDate}
+                            onChange={(e) => setDueDate(e.target.value)}
+                            className="bg-surface-soft text-slate-900 border-surface-strong"
+                        />
+                    </div>
 
-                        type="submit"
-
-                        className="
-                        w-full
-                        bg-blue-600
-                        text-white
-                        py-2
-                        rounded-lg
-                        hover:bg-blue-700
-                        "
-
-                    >
-
-                        Create Task
-
-
-                    </button>
+                    <Button type="submit" className="w-full">Create Task</Button>
 
 
 

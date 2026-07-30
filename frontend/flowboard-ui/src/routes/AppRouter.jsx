@@ -62,9 +62,9 @@ function AppRouter() {
           }
         />
 
-        {/* Kanban Board */}
+        {/* Meeting Room (project-wise discussion) */}
         <Route
-          path="/board"
+          path="/meeting-room"
           element={
             <ProtectedRoute>
               <AppLayout>

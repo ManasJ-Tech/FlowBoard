@@ -263,11 +263,9 @@ function TaskCard({ task, onUpdated }) {
 
 
                 <EditTaskDialog
-
+                    key={task.id}
                     task={task}
-
                     onUpdated={onUpdated}
-
                 />
 
 

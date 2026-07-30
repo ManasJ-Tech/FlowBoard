@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 import { deleteProject } from "@/services/projectService";
 
@@ -27,7 +28,7 @@ function ProjectActions({ id }) {
 
             navigate("/dashboard");
 
-        } catch(error) {
+        } catch (error) {
 
             console.error(error);
 
@@ -36,29 +37,11 @@ function ProjectActions({ id }) {
     }
 
 
-
     return (
-
-        <button
-            onClick={handleDelete}
-            className="
-            flex items-center gap-2
-            rounded-lg
-            bg-red-600
-            px-5
-            py-2
-            text-white
-            hover:bg-red-700
-            transition
-            "
-        >
-
-            <Trash2 size={18}/>
-
-            Delete Project
-
-        </button>
-
+        <Button variant="destructive" size="sm" onClick={handleDelete}>
+            <Trash2 size={16} />
+            <span className="ml-2">Delete</span>
+        </Button>
     );
 }
 

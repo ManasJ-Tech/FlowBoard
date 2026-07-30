@@ -6,7 +6,7 @@ let stompClient = null;
 
 
 
-export function connectSocket(onMessageReceived) {
+export function connectSocket(onMessageReceived, topic = "/topic/topic") {
 
 
     stompClient = new Client({
@@ -28,29 +28,14 @@ export function connectSocket(onMessageReceived) {
             );
 
 
-            stompClient.subscribe(
-                "/topic/topic",
+            stompClient.subscribe(topic, (message) => {
+                const data = JSON.parse(message.body);
 
-                (message) => {
+                console.log("WebSocket Update:", data);
 
+                onMessageReceived(data);
 
-                    const data =
-                        JSON.parse(message.body);
-
-
-
-                    console.log(
-                        "WebSocket Update:",
-                        data
-                    );
-
-
-
-                    onMessageReceived(data);
-
-                }
-
-            );
+            });
 
 
         },

@@ -1,8 +1,6 @@
-import * as React from "react"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
 
 
@@ -36,6 +34,8 @@ function DialogClose({
 
 function DialogOverlay({
   className,
+  onPointerDown,
+  onPointerUp,
   ...props
 }) {
   return (
@@ -45,6 +45,14 @@ function DialogOverlay({
         "fixed inset-0 isolate z-50 bg-black/70 backdrop-blur-sm duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
         className
       )}
+      onPointerDown={(event) => {
+        event.stopPropagation();
+        onPointerDown?.(event);
+      }}
+      onPointerUp={(event) => {
+        event.stopPropagation();
+        onPointerUp?.(event);
+      }}
       {...props}
     />
   );
@@ -53,9 +61,14 @@ function DialogOverlay({
 
 
 function DialogContent({
-  className,
   children,
   showCloseButton = true,
+  onPointerDown,
+  onPointerDownCapture,
+  onPointerUp,
+  onPointerUpCapture,
+  onClick,
+  onClickCapture,
   ...props
 }) {
 
@@ -76,6 +89,30 @@ function DialogContent({
 
         )}
 
+        onPointerDown={(event) => {
+          event.stopPropagation();
+          onPointerDown?.(event);
+        }}
+        onPointerDownCapture={(event) => {
+          event.stopPropagation();
+          onPointerDownCapture?.(event);
+        }}
+        onPointerUp={(event) => {
+          event.stopPropagation();
+          onPointerUp?.(event);
+        }}
+        onPointerUpCapture={(event) => {
+          event.stopPropagation();
+          onPointerUpCapture?.(event);
+        }}
+        onClick={(event) => {
+          event.stopPropagation();
+          onClick?.(event);
+        }}
+        onClickCapture={(event) => {
+          event.stopPropagation();
+          onClickCapture?.(event);
+        }}
         {...props}
 
       >
@@ -138,7 +175,6 @@ function DialogHeader({
 
 function DialogFooter({
   className,
-  showCloseButton = false,
   children,
   ...props
 }) {

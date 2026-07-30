@@ -86,7 +86,7 @@ function Dashboard() {
                 ) : !dashboard?.recentProjects?.length ? (
                   <p className="text-muted-custom">No recent projects available.</p>
                 ) : (
-                  dashboard.recentProjects.map((project) => (
+                  (dashboard.recentProjects || []).slice(0, 3).map((project) => (
                     <ProjectCard
                       key={project.id}
                       id={project.id}
@@ -122,15 +122,15 @@ function Dashboard() {
                   <p className="text-muted-custom">Loading reminders...</p>
                 ) : dashboard?.upcomingReminders?.length ? (
                   dashboard.upcomingReminders.map((reminder, index) => (
-                    <div key={index} className="rounded-2xl border border-surface-strong bg-surface p-4 shadow-sm">
+                    <div key={index} className="rounded-2xl border border-surface-strong bg-surface p-4 shadow-sm overflow-hidden">
                       <div className="flex items-start gap-4">
                         <div className="rounded-2xl bg-emerald-50 p-3 text-emerald-600">
                           <CalendarDays size={18} />
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-slate-900">{reminder.message}</p>
+                          <p className="text-sm font-medium text-slate-900 truncate">{reminder.message}</p>
                           {reminder.description ? (
-                            <p className="mt-1 text-sm text-slate-700">{reminder.description}</p>
+                            <p className="mt-1 text-sm text-slate-700 truncate line-clamp-2">{reminder.description}</p>
                           ) : null}
                           <p className="mt-2 text-xs text-muted-custom">Due: {reminder.dueDate}</p>
                         </div>
@@ -158,7 +158,7 @@ function Dashboard() {
                 </div>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-4 max-h-64 overflow-auto pr-2">
                 {loading ? (
                   <p className="text-muted-custom">Loading activity...</p>
                 ) : dashboard?.activityLog?.length ? (

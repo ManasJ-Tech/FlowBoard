@@ -9,6 +9,7 @@ import { getProjectById } from "@/services/projectService";
 
 import ProjectActions from "@/components/project/ProjectActions";
 import EditProjectDialog from "@/components/project/EditProjectDialog";
+import ProjectRoom from "@/components/project/ProjectRoom";
 
 
 function ProjectDetails() {
@@ -64,17 +65,24 @@ function ProjectDetails() {
 
   return (
     <div className="flex flex-1 flex-col bg-surface text-slate-900 p-8">
-      <h1 className="text-4xl font-bold">{project.name}</h1>
+      <div className="w-full flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-4xl font-semibold">{project.name}</h1>
+          <p className="mt-2 text-muted-custom">{project.description}</p>
+        </div>
 
-      <p className="mt-4 text-muted-custom">{project.description}</p>
-
-      <div className="mt-8 flex gap-4">
-        <EditProjectDialog project={project} onUpdated={loadProject} />
-
-        <ProjectActions id={project.id} />
+        <div className="flex items-center gap-3">
+          <EditProjectDialog project={project} onUpdated={loadProject} />
+          <ProjectActions id={project.id} />
+        </div>
       </div>
 
       <KanbanBoard projectId={project.id} />
+
+      <div className="mt-8">
+        <h2 className="text-xl font-semibold text-slate-900 mb-3">Project Room</h2>
+        <ProjectRoom projectId={project.id} />
+      </div>
 
       <div className="mt-8 rounded-xl border border-surface-strong bg-surface-soft p-6 shadow-sm">
         <h2 className="text-xl font-semibold text-slate-900">Project Information</h2>

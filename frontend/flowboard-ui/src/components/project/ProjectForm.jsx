@@ -55,11 +55,7 @@ function ProjectForm({ onSubmit, loading }) {
         />
       </div>
 
-      <Button
-        type="submit"
-        disabled={loading}
-        className="h-11 w-full bg-blue-600 hover:bg-blue-700"
-      >
+      <Button type="submit" disabled={loading} className="h-11 w-full">
         {loading ? "Creating..." : "Create Project"}
       </Button>
     </form>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
     DndContext,
@@ -31,27 +31,15 @@ function KanbanBoard({ projectId }) {
 
 
 
-    async function loadTasks() {
-
+    const loadTasks = useCallback(async () => {
         try {
-
             const data = await getTasksByProject(projectId);
-
-            console.log(
-                "Kanban Tasks:",
-                data
-            );
-
+            console.log("Kanban Tasks:", data);
             setTasks(data);
-
-
-        } catch(error) {
-
+        } catch (error) {
             console.error(error);
-
         }
-
-    }
+    }, [projectId]);
 
 
 
@@ -61,37 +49,17 @@ function KanbanBoard({ projectId }) {
 
 
     useEffect(() => {
-
-
-        loadTasks();
-
-
+        void Promise.resolve().then(loadTasks);
 
         connectSocket(() => {
-
-
-            console.log(
-                "Task update received"
-            );
-
-
-            loadTasks();
-
-
+            console.log("Task update received");
+            void Promise.resolve().then(loadTasks);
         });
 
-
-
         return () => {
-
-
             disconnectSocket();
-
-
         };
-
-
-    }, [projectId]);
+    }, [projectId, loadTasks]);
 
 
 

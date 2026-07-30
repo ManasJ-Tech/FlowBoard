@@ -20,9 +20,9 @@ const menuItems = [
     path: "/projects",
   },
   {
-    title: "Board",
+    title: "Meeting Room",
     icon: IconChecklist,
-    path: "/board",
+    path: "/meeting-room",
   },
   {
     title: "Profile",

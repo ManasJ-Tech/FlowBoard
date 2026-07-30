@@ -32,8 +32,12 @@ function DashboardHeader() {
   return (
     <header className="flex items-center justify-between border-b border-surface-strong bg-surface px-8 py-5">
       <div className="flex items-center gap-4">
-        <div className="h-20 w-20 rounded-3xl bg-surface-soft p-2 shadow-sm shadow-slate-200/60">
-          <Lottie animationData={animationData} loop autoplay className="h-full w-full" />
+        <div className="h-28 w-28 md:h-32 md:w-32 rounded-3xl bg-surface-soft p-2 shadow-sm shadow-slate-200/60">
+          {/* some bundlers return the component as a default export object; handle both shapes */}
+          {(() => {
+            const LottieComp = Lottie && Lottie.default ? Lottie.default : Lottie;
+            return <LottieComp animationData={animationData} loop autoplay className="h-full w-full" />;
+          })()}
         </div>
         <div>
           <p className="text-sm text-muted-custom">Welcome back,</p>

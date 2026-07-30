@@ -47,3 +47,8 @@ export async function getCurrentUser() {
     return response.data;
 
 }
+
+export async function getUserById(id) {
+    const response = await axios.get(`${API}/${id}`, getHeaders());
+    return response.data;
+}
