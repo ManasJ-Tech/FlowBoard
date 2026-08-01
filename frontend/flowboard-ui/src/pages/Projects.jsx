@@ -33,8 +33,8 @@ function Projects() {
 
   return (
     <div className="space-y-6">
-      <div className="d-flex align-items-center justify-content-between mb-4">
-        <div>
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+        <div className="min-w-0 flex-1">
           <h1 className="text-3xl font-bold">Projects</h1>
           <p className="text-muted-custom mt-2">Browse and manage your active projects.</p>
         </div>

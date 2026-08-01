@@ -12,9 +12,25 @@ function Dialog({
 
 
 function DialogTrigger({
+  asChild,
+  children,
   ...props
 }) {
-  return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />;
+  if (asChild && children) {
+    return (
+      <DialogPrimitive.Trigger
+        data-slot="dialog-trigger"
+        render={children}
+        {...props}
+      />
+    );
+  }
+
+  return (
+    <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props}>
+      {children}
+    </DialogPrimitive.Trigger>
+  );
 }
 
 
@@ -26,9 +42,25 @@ function DialogPortal({
 
 
 function DialogClose({
+  asChild,
+  children,
   ...props
 }) {
-  return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
+  if (asChild && children) {
+    return (
+      <DialogPrimitive.Close
+        data-slot="dialog-close"
+        render={children}
+        {...props}
+      />
+    );
+  }
+
+  return (
+    <DialogPrimitive.Close data-slot="dialog-close" {...props}>
+      {children}
+    </DialogPrimitive.Close>
+  );
 }
 
 
@@ -83,9 +115,19 @@ function DialogContent({
 
         data-slot="dialog-content"
 
+        style={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          zIndex: 60,
+          width: "min(100%, calc(100% - 2rem))",
+          maxWidth: "min(100%, 28rem)",
+        }}
+
         className={cn(
 
-          "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-surface p-6 text-sm text-slate-900 border border-surface-strong shadow-xl duration-100 outline-none sm:max-w-md",
+          "grid gap-4 rounded-xl bg-surface p-6 text-sm text-slate-900 border border-surface-strong shadow-xl duration-100 outline-none",
 
         )}
 

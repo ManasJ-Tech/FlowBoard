@@ -55,15 +55,15 @@ function Dashboard() {
       <DashboardHeader />
 
       <main className="flex-1 p-8">
-        <div className="flex items-center justify-between">
-          <div>
+<div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="min-w-0 flex-1">
             <h1 className="text-4xl font-bold">Welcome Back</h1>
             <p className="mt-2 text-muted-custom">
               Here's what's happening with your workspace today.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center justify-end gap-3">
             <CreateProjectDialog onProjectCreated={loadDashboard} />
             {user?.role === "PROJECT_MANAGER" ? (
               <CreateReminderDialog onReminderCreated={loadDashboard} />

@@ -94,7 +94,7 @@ function EditTaskDialog({ task, onUpdated }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
 
-      <DialogTrigger asChild>
+      <DialogTrigger>
         <Button variant="default" size="sm" onPointerDown={(e) => e.stopPropagation()}>Edit</Button>
       </DialogTrigger>
 
