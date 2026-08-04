@@ -1,3 +1,4 @@
+import React from "react"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
 
 import { cn } from "@/lib/utils"
@@ -41,18 +42,56 @@ function DialogPortal({
 }
 
 
-function DialogClose({
-  asChild,
-  children,
-  ...props
-}) {
-  if (asChild && children) {
+function DialogClose({ asChild, children, ...props }) {
+  if (asChild && React.isValidElement(children)) {
+    // Clone the child button to ensure clicks don't propagate to underlying elements
+    const child = React.cloneElement(children, {
+      onPointerDown: (e) => {
+        e.stopPropagation();
+        children.props?.onPointerDown?.(e);
+      },
+      onPointerUp: (e) => {
+        e.stopPropagation();
+        children.props?.onPointerUp?.(e);
+      },
+      onPointerDownCapture: (e) => {
+        e.stopPropagation();
+        children.props?.onPointerDownCapture?.(e);
+      },
+      onPointerUpCapture: (e) => {
+        e.stopPropagation();
+        children.props?.onPointerUpCapture?.(e);
+      },
+      onMouseDown: (e) => {
+        e.stopPropagation();
+        children.props?.onMouseDown?.(e);
+      },
+      onMouseUp: (e) => {
+        e.stopPropagation();
+        children.props?.onMouseUp?.(e);
+      },
+      onMouseDownCapture: (e) => {
+        e.stopPropagation();
+        children.props?.onMouseDownCapture?.(e);
+      },
+      onMouseUpCapture: (e) => {
+        e.stopPropagation();
+        children.props?.onMouseUpCapture?.(e);
+      },
+      onClick: (e) => {
+        e.stopPropagation();
+        children.props?.onClick?.(e);
+      },
+      onClickCapture: (e) => {
+        e.stopPropagation();
+        children.props?.onClickCapture?.(e);
+      },
+    });
+
     return (
-      <DialogPrimitive.Close
-        data-slot="dialog-close"
-        render={children}
-        {...props}
-      />
+      <DialogPrimitive.Close data-slot="dialog-close" {...props} asChild>
+        {child}
+      </DialogPrimitive.Close>
     );
   }
 
@@ -131,30 +170,6 @@ function DialogContent({
 
         )}
 
-        onPointerDown={(event) => {
-          event.stopPropagation();
-          onPointerDown?.(event);
-        }}
-        onPointerDownCapture={(event) => {
-          event.stopPropagation();
-          onPointerDownCapture?.(event);
-        }}
-        onPointerUp={(event) => {
-          event.stopPropagation();
-          onPointerUp?.(event);
-        }}
-        onPointerUpCapture={(event) => {
-          event.stopPropagation();
-          onPointerUpCapture?.(event);
-        }}
-        onClick={(event) => {
-          event.stopPropagation();
-          onClick?.(event);
-        }}
-        onClickCapture={(event) => {
-          event.stopPropagation();
-          onClickCapture?.(event);
-        }}
         {...props}
 
       >
@@ -165,7 +180,7 @@ function DialogContent({
 
 
         {showCloseButton && (
-          <DialogPrimitive.Close asChild data-slot="dialog-close">
+          <DialogClose asChild>
             <button
               type="button"
               className="absolute top-3 right-3 text-muted-custom hover:text-slate-900"
@@ -173,7 +188,7 @@ function DialogContent({
               <XIcon />
               <span className="sr-only">Close</span>
             </button>
-          </DialogPrimitive.Close>
+          </DialogClose>
         )}
 
 
