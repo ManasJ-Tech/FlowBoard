@@ -34,4 +34,12 @@ public class AuthController {
         AuthResponse response = authService.login(request);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<AuthResponse> forgotPassword(
+            @RequestBody com.manas.flowboard.dto.ForgotPasswordRequest request
+    ){
+        authService.forgotPassword(request.getEmail());
+        return ResponseEntity.ok(new AuthResponse(null, "If an account exists, a password reset link has been sent to the email."));
+    }
 }

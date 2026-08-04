@@ -114,4 +114,13 @@ public class AuthService {
         String token = jwtService.generateToken(user.getEmail());
         return new AuthResponse(token, "Login successful");
     }
+
+    public void forgotPassword(String email) {
+        // Always return a generic response to avoid account enumeration.
+        userRepository.findByEmail(email).ifPresent(user -> {
+            // In a real app: generate a token, persist it, and send email with reset link.
+            String token = UUID.randomUUID().toString();
+            System.out.println("Password reset requested for " + email + ", token=" + token);
+        });
+    }
 }
