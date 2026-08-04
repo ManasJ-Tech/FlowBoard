@@ -41,17 +41,14 @@ function DashboardHeader() {
         </div>
         <div>
           <p className="text-sm text-muted-custom">Welcome back,</p>
-          <h2 className="text-2xl font-bold text-slate-900">Your dashboard</h2>
+          <h2 className="text-2xl font-bold text-slate-900">
+            {user?.fullName ? `${user.fullName}'s dashboard` : "Your dashboard"}
+          </h2>
         </div>
       </div>
 
       {/* Right Side */}
       <div className="flex items-center gap-5">
-
-        <button className="rounded-lg bg-surface p-2 hover:bg-surface-soft transition">
-          <Bell className="text-muted-custom" size={20} />
-        </button>
-
         <div className="flex items-center gap-3">
 
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white font-semibold">

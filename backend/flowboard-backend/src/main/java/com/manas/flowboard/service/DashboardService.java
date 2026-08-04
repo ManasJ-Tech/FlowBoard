@@ -63,30 +63,15 @@ public class DashboardService {
             // Projects assigned to the team user
             List<Project> assignedProjects = projectRepository.findDistinctByTasks_AssignedUserOrderByCreatedAtDesc(currentUser);
 
-            // Projects created by the user's manager (if any)
-            List<Project> managerProjects = new ArrayList<>();
             if (currentUser.getManager() != null) {
-                managerProjects = projectRepository.findAllByOwnerOrderByCreatedAtDesc(currentUser.getManager());
                 response.setTeamMemberCount(userRepository.countByManager(currentUser.getManager()));
             }
 
-            // Merge manager projects and assigned projects, deduplicate by id
-            List<Project> merged = new ArrayList<>();
-            // prefer manager projects first so manager-created projects appear higher
-            merged.addAll(managerProjects);
-            for (Project p : assignedProjects) {
-                boolean exists = merged.stream().anyMatch(mp -> mp.getId() != null && mp.getId().equals(p.getId()));
-                if (!exists) merged.add(p);
-            }
-
-            // sort by createdAt desc
-            merged.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()));
-
-            response.setProjectCount((long) merged.size());
+            response.setProjectCount((long) assignedProjects.size());
             response.setTaskCount(taskRepository.countByAssignedUser(currentUser));
             response.setCompletedTaskCount(taskRepository.countByAssignedUserAndStatus(currentUser, TaskStatus.DONE));
 
-            response.setRecentProjects(merged.stream()
+            response.setRecentProjects(assignedProjects.stream()
                     .limit(5)
                     .map(this::toSummary)
                     .collect(Collectors.toList())
