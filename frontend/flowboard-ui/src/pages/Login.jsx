@@ -103,138 +103,167 @@ function Login() {
     }
   };
   return (
-    <div className="d-flex min-vh-100 align-items-center justify-content-center py-5 bg-surface">
-      <div className="col-12 col-md-6 col-xl-4">
-        <div className="app-card app-card-shadow p-4">
-          <div className="mb-4 text-center">
-            <div className="text-primary fs-1 mb-2">ConcurDev</div>
-            <p className="app-subtitle">Sign in to manage your projects with ease.</p>
+    <div className="min-vh-100 d-flex align-items-center bg-surface">
+      <div className="container py-5">
+        <div className="row gx-0 shadow-lg rounded-4 overflow-hidden">
+          <div className="col-12 col-lg-6 bg-primary text-white p-5 d-flex flex-column justify-content-between">
+            <div>
+              <span className="badge bg-white text-primary mb-2 fs-4 fw-semibold py-2 px-3">ConcurDev</span>
+              <h1 className="display-6 fw-bold mb-3">Real-time project management workspace</h1>
+              <p className="lead text-white-75 mb-4">
+                Collaborate instantly, track every milestone, and keep your team moving forward together.
+              </p>
+              <ul className="list-unstyled lh-lg fw-semibold">
+                <li className="mb-2">✓ Live task updates across the team</li>
+                <li className="mb-2">✓ Centralized boards for every project</li>
+                <li className="mb-2">✓ Smarter planning with instant reminders</li>
+              </ul>
+            </div>
+
+            <div className="mt-4 pt-4 border-top border-white/20">
+              <p className="mb-1 text-white-75">Unlock more focus and faster delivery</p>
+              <p className="fs-6">
+                Sign in to ConcurDev and turn your project roadmap into reality.
+              </p>
+            </div>
           </div>
 
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label className="form-label">Email</label>
-              <input
-                type="email"
-                className={`form-control ${emailError ? "is-invalid" : ""}`}
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onBlur={() => {
-                  if (!email) setEmailError("Email is required.");
-                  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-                    setEmailError("Please enter a valid email address.");
-                  else setEmailError("");
-                }}
-              />
-              {emailError && (
-                <div className="invalid-feedback d-block">{emailError}</div>
-              )}
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Password</label>
-              <div className="input-group">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  className={`form-control ${passwordError ? "is-invalid" : ""}`}
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onBlur={() => {
-                    if (!password) setPasswordError("Password is required.");
-                    else setPasswordError("");
-                  }}
-                />
-                {passwordError && (
-                  <div className="invalid-feedback d-block">{passwordError}</div>
-                )}
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
-            </div>
-
-            {error && (
-              <div className="alert alert-danger" role="alert" aria-atomic="true">
-                {error}
-              </div>
-            )}
-
-            <button type="submit" className="btn btn-primary w-100" disabled={isSubmitting}>
-              {isSubmitting ? "Signing in..." : "Sign In"}
-            </button>
-            
-            <div className="text-center mt-3">
-              Don't have an account?{' '}
-              <Link to="/register" className="link-primary">
-                Sign up
-              </Link>
-            </div>
-            <div className="text-center mt-2">
-              <button type="button" className="btn btn-link p-0" onClick={() => setShowForgot((s) => !s)}>
-                Forgot password?
-              </button>
-            </div>
-            {showForgot && (
-              <div className="mt-3 p-3 border rounded bg-light">
-                <h6>Reset password</h6>
-                {forgotSuccess && (
-                  <div className="alert alert-success" role="alert" aria-atomic="true">{forgotSuccess}</div>
-                )}
-                {forgotError && (
-                  <div className="alert alert-danger" role="alert" aria-atomic="true">{forgotError}</div>
-                )}
-                <div className="mb-2">
-                  <input
-                    type="email"
-                    className={`form-control`}
-                    placeholder="Enter your email"
-                    value={forgotEmail}
-                    onChange={(e) => setForgotEmail(e.target.value)}
-                  />
+          <div className="col-12 col-lg-6 bg-white p-4 d-flex align-items-center justify-content-center">
+            <div className="w-100" style={{ maxWidth: 460 }}>
+              <div className="app-card app-card-shadow p-4">
+                <div className="mb-4 text-center">
+                  <div className="text-primary display-3 fw-bold mb-2">ConcurDev</div>
+                  <p className="app-subtitle">Sign in to the real-time project management workspace.</p>
                 </div>
-                <div className="d-flex gap-2">
-                  <button
-                    className="btn btn-primary"
-                    disabled={isSendingForgot}
-                    onClick={async () => {
-                      setForgotError("");
-                      setForgotSuccess("");
-                      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                      if (!forgotEmail) {
-                        setForgotError("Email is required.");
-                        return;
-                      }
-                      if (!emailRegex.test(forgotEmail)) {
-                        setForgotError("Please enter a valid email address.");
-                        return;
-                      }
-                      setIsSendingForgot(true);
-                      try {
-                        const resp = await forgotPassword({ email: forgotEmail });
-                        setForgotSuccess(resp?.message || "If an account exists, a reset link has been sent.");
-                      } catch (e) {
-                        console.error(e);
-                        setForgotError("Unable to send reset link. Try again later.");
-                      } finally {
-                        setIsSendingForgot(false);
-                      }
-                    }}
-                  >
-                    {isSendingForgot ? "Sending..." : "Send reset link"}
+
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <label className="form-label">Email</label>
+                    <input
+                      type="email"
+                      className={`form-control ${emailError ? "is-invalid" : ""}`}
+                      placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      onBlur={() => {
+                        if (!email) setEmailError("Email is required.");
+                        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+                          setEmailError("Please enter a valid email address.");
+                        else setEmailError("");
+                      }}
+                    />
+                    {emailError && (
+                      <div className="invalid-feedback d-block">{emailError}</div>
+                    )}
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="form-label">Password</label>
+                    <div className="input-group">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        className={`form-control ${passwordError ? "is-invalid" : ""}`}
+                        placeholder="Enter your password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        onBlur={() => {
+                          if (!password) setPasswordError("Password is required.");
+                          else setPasswordError("");
+                        }}
+                      />
+                      {passwordError && (
+                        <div className="invalid-feedback d-block">{passwordError}</div>
+                      )}
+                      <button
+                        type="button"
+                        className="btn btn-outline-secondary"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {error && (
+                    <div className="alert alert-danger" role="alert" aria-atomic="true">
+                      {error}
+                    </div>
+                  )}
+
+                  <button type="submit" className="btn btn-primary w-100" disabled={isSubmitting}>
+                    {isSubmitting ? "Signing in..." : "Sign In"}
                   </button>
-                  <button type="button" className="btn btn-outline-secondary" onClick={() => setShowForgot(false)}>
-                    Cancel
-                  </button>
-                </div>
+
+                  <div className="text-center mt-3">
+                    Don't have an account?{' '}
+                    <Link to="/register" className="link-primary">
+                      Sign up
+                    </Link>
+                  </div>
+                  <div className="text-center mt-2">
+                    <button type="button" className="btn btn-link p-0" onClick={() => setShowForgot((s) => !s)}>
+                      Forgot password?
+                    </button>
+                  </div>
+                  {showForgot && (
+                    <div className="mt-3 p-3 border rounded bg-light">
+                      <h6>Reset password</h6>
+                      {forgotSuccess && (
+                        <div className="alert alert-success" role="alert" aria-atomic="true">{forgotSuccess}</div>
+                      )}
+                      {forgotError && (
+                        <div className="alert alert-danger" role="alert" aria-atomic="true">{forgotError}</div>
+                      )}
+                      <div className="mb-2">
+                        <input
+                          type="email"
+                          className={`form-control`}
+                          placeholder="Enter your email"
+                          value={forgotEmail}
+                          onChange={(e) => setForgotEmail(e.target.value)}
+                        />
+                      </div>
+                      <div className="d-flex gap-2">
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          disabled={isSendingForgot}
+                          onClick={async () => {
+                            setForgotError("");
+                            setForgotSuccess("");
+                            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                            if (!forgotEmail) {
+                              setForgotError("Email is required.");
+                              return;
+                            }
+                            if (!emailRegex.test(forgotEmail)) {
+                              setForgotError("Please enter a valid email address.");
+                              return;
+                            }
+                            setIsSendingForgot(true);
+                            try {
+                              const resp = await forgotPassword({ email: forgotEmail });
+                              setForgotSuccess(resp?.message || "If an account exists, a reset link has been sent.");
+                            } catch (e) {
+                              console.error(e);
+                              setForgotError("Unable to send reset link. Try again later.");
+                            } finally {
+                              setIsSendingForgot(false);
+                            }
+                          }}
+                        >
+                          {isSendingForgot ? "Sending..." : "Send reset link"}
+                        </button>
+                        <button type="button" className="btn btn-outline-secondary" onClick={() => setShowForgot(false)}>
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </form>
               </div>
-            )}
-          </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
