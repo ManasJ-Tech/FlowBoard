@@ -4,12 +4,15 @@ import java.util.List;
 
 import com.manas.flowboard.dto.TaskStatusRequest;
 import com.manas.flowboard.entity.Task;
+import com.manas.flowboard.entity.User;
 import com.manas.flowboard.dto.TaskRequest;
 import com.manas.flowboard.entity.TaskStatus;
+import com.manas.flowboard.repository.UserRepository;
 import com.manas.flowboard.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,17 +20,22 @@ import org.springframework.web.bind.annotation.*;
 public class TaskController {
 
     private final TaskService taskService;
+    private final UserRepository userRepository;
 
-    public TaskController(TaskService taskService) {
+    public TaskController(TaskService taskService, UserRepository userRepository) {
         this.taskService = taskService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping
     public ResponseEntity<Task> createTask(
-            @Valid @RequestBody TaskRequest request
+            @Valid @RequestBody TaskRequest request,
+            Authentication authentication
     ) {
+        User currentUser = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("Current user not found"));
 
-        Task task = taskService.createTask(request);
+        Task task = taskService.createTask(request, currentUser);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(task);
     }

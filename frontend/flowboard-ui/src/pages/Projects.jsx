@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { getProjects } from "@/services/projectService";
+import { getCurrentUser } from "@/services/userService";
 import CreateProjectDialog from "@/components/project/CreateProjectDialog";
 import ProjectCard from "@/components/dashboard/ProjectCard";
 
 function Projects() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
 
   async function loadProjects() {
     try {
@@ -21,6 +23,17 @@ function Projects() {
 
   useEffect(() => {
     loadProjects();
+
+    async function loadUser() {
+      try {
+        const currentUser = await getCurrentUser();
+        setUser(currentUser);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    loadUser();
 
     function onProjectCreatedEvent() {
       loadProjects();
@@ -38,7 +51,9 @@ function Projects() {
           <h1 className="text-3xl font-bold">Projects</h1>
           <p className="text-muted-custom mt-2">Browse and manage your active projects.</p>
         </div>
-        <CreateProjectDialog onProjectCreated={loadProjects} />
+        {user?.role === "PROJECT_MANAGER" ? (
+          <CreateProjectDialog onProjectCreated={loadProjects} />
+        ) : null}
       </div>
 
       {loading ? (

@@ -15,7 +15,9 @@ function TaskColumn({
 
     projectId,
 
-    onTaskCreated
+    onTaskCreated,
+
+    canCreateTask = false
 
 }) {
 
@@ -88,7 +90,7 @@ function TaskColumn({
 
 
                 {
-                    title === "To Do" && (
+                    title === "To Do" && canCreateTask && (
 
                         <AddTaskDialog
 

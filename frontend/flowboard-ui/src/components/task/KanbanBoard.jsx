@@ -6,6 +6,8 @@ import {
     closestCorners
 } from "@dnd-kit/core";
 
+import { getCurrentUser } from "@/services/userService";
+
 import TaskColumn from "./TaskColumn";
 
 import {
@@ -26,6 +28,7 @@ function KanbanBoard({ projectId }) {
     const [tasks, setTasks] = useState([]);
 
     const [activeTask, setActiveTask] = useState(null);
+    const [isManager, setIsManager] = useState(false);
 
 
 
@@ -60,6 +63,19 @@ function KanbanBoard({ projectId }) {
             disconnectSocket();
         };
     }, [projectId, loadTasks]);
+
+    useEffect(() => {
+        async function loadUser() {
+            try {
+                const currentUser = await getCurrentUser();
+                setIsManager(currentUser?.role === "PROJECT_MANAGER");
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        loadUser();
+    }, []);
 
 
 
@@ -285,6 +301,8 @@ function KanbanBoard({ projectId }) {
                     projectId={projectId}
 
                     onTaskCreated={loadTasks}
+
+                    canCreateTask={isManager}
 
                 />
 

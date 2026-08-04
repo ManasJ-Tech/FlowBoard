@@ -64,7 +64,9 @@ function Dashboard() {
           </div>
 
           <div className="flex flex-wrap items-center justify-end gap-3">
-            <CreateProjectDialog onProjectCreated={loadDashboard} />
+            {user?.role === "PROJECT_MANAGER" ? (
+              <CreateProjectDialog onProjectCreated={loadDashboard} />
+            ) : null}
             {user?.role === "PROJECT_MANAGER" ? (
               <CreateReminderDialog onReminderCreated={loadDashboard} />
             ) : null}

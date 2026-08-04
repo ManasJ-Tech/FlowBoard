@@ -13,7 +13,9 @@ import com.manas.flowboard.repository.ProjectRepository;
 import com.manas.flowboard.repository.TaskRepository;
 import com.manas.flowboard.repository.UserRepository;
 import com.manas.flowboard.websocket.TaskUpdatePublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class TaskService {
@@ -37,11 +39,18 @@ public class TaskService {
 
 
 
-    public Task createTask(TaskRequest request) {
+    public Task createTask(TaskRequest request, User currentUser) {
+        if (currentUser == null || currentUser.getRole() == null || !currentUser.getRole().name().equals("PROJECT_MANAGER")) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only project managers can create tasks");
+        }
 
         Project project = projectRepository.findById(request.getProjectId())
                 .orElseThrow(() ->
-                        new RuntimeException("Project not found"));
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
+
+        if (project.getOwner() == null || !project.getOwner().getId().equals(currentUser.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only create tasks for your own projects");
+        }
 
         Task task = new Task();
 
@@ -52,7 +61,7 @@ public class TaskService {
 
         if (request.getAssignedUserId() != null) {
             User user = userRepository.findById(request.getAssignedUserId())
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
             task.setAssignedUser(user);
         }
 
@@ -71,8 +80,8 @@ public class TaskService {
                     task.setDueDate(d.atStartOfDay());
                 } catch (Exception ex2) {
                     // Invalid date format
-                    throw new org.springframework.web.server.ResponseStatusException(
-                            org.springframework.http.HttpStatus.BAD_REQUEST,
+                    throw new ResponseStatusException(
+                            HttpStatus.BAD_REQUEST,
                             "Invalid dueDate format. Use ISO date or ISO date-time"
                     );
                 }
