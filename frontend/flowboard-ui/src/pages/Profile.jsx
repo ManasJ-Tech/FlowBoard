@@ -77,6 +77,11 @@ function Profile() {
                 <span className="text-slate-700">Manager Code:</span> {user.managerCode}
               </p>
             )}
+            {user.managerName && (
+              <p>
+                <span className="text-slate-700">Project Manager:</span> {user.managerName}
+              </p>
+            )}
           </div>
         </div>
 

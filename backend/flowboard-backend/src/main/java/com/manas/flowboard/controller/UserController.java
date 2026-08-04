@@ -1,5 +1,6 @@
 package com.manas.flowboard.controller;
 
+import com.manas.flowboard.dto.CurrentUserResponse;
 import com.manas.flowboard.entity.Role;
 import com.manas.flowboard.entity.User;
 import com.manas.flowboard.repository.UserRepository;
@@ -62,13 +63,28 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<User> getCurrentUser(Authentication authentication) {
+    public ResponseEntity<CurrentUserResponse> getCurrentUser(Authentication authentication) {
         if (authentication == null || authentication.getName() == null) {
             return ResponseEntity.status(401).build();
         }
 
         return userRepository.findByEmail(authentication.getName())
-                .map(ResponseEntity::ok)
+                .map(user -> {
+                    String managerName = null;
+                    if (user.getManager() != null) {
+                        managerName = user.getManager().getFullName();
+                    }
+                    CurrentUserResponse response = new CurrentUserResponse(
+                            user.getId(),
+                            user.getFullName(),
+                            user.getEmail(),
+                            user.getRole() != null ? user.getRole().name() : null,
+                            user.getManagerCode(),
+                            managerName,
+                            user.getCreatedAt()
+                    );
+                    return ResponseEntity.ok(response);
+                })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
